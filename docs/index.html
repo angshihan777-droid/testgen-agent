@@ -6,77 +6,78 @@
 <title>testgen-agent · 自动生成并验证单元测试的代码质量 Agent</title>
 <style>
 :root{
-  --bg:#0d1117; --panel:#161b22; --border:#30363d; --text:#e6edf3;
-  --muted:#8b949e; --accent:#58a6ff; --green:#3fb950; --red:#f85149;
-  --yellow:#d29922; --purple:#bc8cff;
+  --bg:#faf9f5; --panel:#ffffff; --panel2:#f4f2ec; --border:#e5e2d8;
+  --text:#28261f; --muted:#77746b; --accent:#d97757; --accent-d:#c15f3c;
+  --green:#3d8f5b; --red:#c0392b; --amber:#c78a3b; --purple:#8b6fc4;
+  --term-bg:#2b2823; --term-text:#e9e3d6;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.6}
-.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.65}
 code,.mono{font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace}
+.wrap{max-width:940px;margin:0 auto;padding:0 22px}
 
-/* hero */
-header{text-align:center;padding:72px 20px 40px}
-header h1{font-size:44px;letter-spacing:-1px;background:linear-gradient(90deg,#58a6ff,#bc8cff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+header{text-align:center;padding:70px 20px 30px}
+header h1{font-size:46px;letter-spacing:-1.2px;color:var(--text);font-weight:700}
+header h1 .dot{color:var(--accent)}
 header p.tag{font-size:19px;color:var(--muted);margin-top:14px}
-.badges{margin-top:22px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.badge{font-size:13px;padding:5px 12px;border:1px solid var(--border);border-radius:20px;color:var(--muted)}
-.badge.g{color:var(--green);border-color:rgba(63,185,80,.4)}
-.cta{margin-top:28px}
-.cta a{display:inline-block;padding:10px 22px;border-radius:8px;text-decoration:none;font-weight:600;font-size:15px}
-.cta a.primary{background:var(--accent);color:#0d1117}
-.cta a.ghost{border:1px solid var(--border);color:var(--text);margin-left:10px}
+header p.tag strong{color:var(--accent-d)}
+.badges{margin-top:22px;display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+.badge{font-size:13px;padding:5px 13px;border:1px solid var(--border);border-radius:20px;color:var(--muted);background:var(--panel)}
+.badge.g{color:var(--green);border-color:rgba(61,143,91,.35);background:rgba(61,143,91,.07)}
+.cta{margin-top:26px}
+.cta a{display:inline-block;padding:11px 24px;border-radius:9px;text-decoration:none;font-weight:600;font-size:15px}
+.cta a.primary{background:var(--accent);color:#fff}
+.cta a.primary:hover{background:var(--accent-d)}
+.cta a.ghost{border:1px solid var(--border);color:var(--text);margin-left:10px;background:var(--panel)}
 
-section{padding:44px 0}
-h2{font-size:26px;margin-bottom:8px;text-align:center}
-.sub{text-align:center;color:var(--muted);margin-bottom:32px;font-size:15px}
+section{padding:40px 0}
+h2{font-size:27px;margin-bottom:8px;text-align:center;font-weight:700}
+.sub{text-align:center;color:var(--muted);margin-bottom:30px;font-size:15px}
 
-/* flow diagram */
-.flow{display:flex;flex-direction:column;align-items:center;gap:0}
-.node{width:100%;max-width:520px;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px 18px;transition:all .4s;position:relative;opacity:.45}
-.node.active{opacity:1;border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 0 24px rgba(88,166,255,.25);transform:scale(1.02)}
-.node .n-title{font-weight:700;font-size:15px}
-.node .n-title .idx{display:inline-block;width:22px;height:22px;line-height:22px;text-align:center;background:var(--border);border-radius:50%;font-size:12px;margin-right:8px;color:var(--text)}
-.node.active .n-title .idx{background:var(--accent);color:#0d1117}
-.node .n-desc{font-size:13px;color:var(--muted);margin-top:4px}
-.arrow{color:var(--muted);font-size:20px;height:26px;line-height:26px}
-.loop-note{font-size:12px;color:var(--purple);margin:2px 0}
-.decision{max-width:520px;width:100%;display:flex;gap:8px;justify-content:center;margin:6px 0}
-.pill{font-size:12px;padding:4px 12px;border-radius:14px;border:1px solid var(--border);color:var(--muted);transition:all .3s}
-.pill.hot{border-color:var(--yellow);color:var(--yellow);box-shadow:0 0 12px rgba(210,153,34,.3)}
-
-/* terminal */
-.term{background:#0a0e14;border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.4);max-width:720px;margin:0 auto}
-.term-bar{background:#161b22;padding:9px 14px;display:flex;align-items:center;gap:7px;border-bottom:1px solid var(--border)}
-.dot{width:12px;height:12px;border-radius:50%}
-.dot.r{background:#ff5f56}.dot.y{background:#ffbd2e}.dot.g{background:#27c93f}
-.term-title{margin-left:10px;font-size:12px;color:var(--muted)}
-.term-body{padding:16px 18px;font-family:"SFMono-Regular",Consolas,monospace;font-size:13.5px;min-height:340px;white-space:pre-wrap}
-.term-body .line{opacity:0;transform:translateY(4px);animation:fade .3s forwards}
+.term{background:var(--term-bg);border-radius:12px;overflow:hidden;box-shadow:0 14px 44px rgba(40,38,31,.18);max-width:740px;margin:0 auto;border:1px solid #3a362f}
+.term-bar{background:#35312a;padding:10px 15px;display:flex;align-items:center;gap:7px}
+.dot3{width:12px;height:12px;border-radius:50%}
+.dot3.r{background:#ff5f56}.dot3.y{background:#ffbd2e}.dot3.g{background:#27c93f}
+.term-title{margin-left:10px;font-size:12px;color:#a8a396}
+.term-body{padding:16px 18px;font-family:"SFMono-Regular",Consolas,monospace;font-size:13.5px;min-height:380px;white-space:pre-wrap;color:var(--term-text)}
+.term-body .line{opacity:0;transform:translateY(4px);animation:fade .28s forwards}
 @keyframes fade{to{opacity:1;transform:none}}
-.c-prompt{color:var(--green)}.c-cmd{color:var(--text)}
-.c-tag{color:var(--accent)}.c-dim{color:var(--muted)}
-.c-ok{color:var(--green)}.c-warn{color:var(--yellow)}.c-bad{color:var(--red)}.c-pur{color:var(--purple)}
-.progress{display:inline-block;vertical-align:middle}
-.replay{display:block;margin:16px auto 0;background:transparent;border:1px solid var(--border);color:var(--muted);padding:6px 16px;border-radius:8px;cursor:pointer;font-size:13px}
-.replay:hover{border-color:var(--accent);color:var(--accent)}
+.c-prompt{color:#7fd39b}.c-cmd{color:#f0ead9}
+.c-tag{color:#7cb7f0}.c-dim{color:#96907f}
+.c-ok{color:#7fd39b}.c-warn{color:#e6b866}.c-bad{color:#f08a7c}.c-pur{color:#c3a6f0}
+.cursor{display:inline-block;width:8px;height:15px;background:var(--term-text);vertical-align:-2px;animation:blink 1s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+.wait-badge{color:var(--amber)}
 
-/* cards */
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
-.card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:20px}
+.replay{display:block;margin:16px auto 0;background:var(--panel);border:1px solid var(--border);color:var(--muted);padding:7px 18px;border-radius:9px;cursor:pointer;font-size:13px}
+.replay:hover{border-color:var(--accent);color:var(--accent)}
+.note{max-width:740px;margin:14px auto 0;font-size:12px;color:var(--muted);text-align:center}
+
+.flow{display:flex;flex-direction:column;align-items:center;gap:0}
+.node{width:100%;max-width:540px;background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:14px 18px;transition:all .4s;opacity:.5}
+.node.active{opacity:1;border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 8px 22px rgba(217,119,87,.18);transform:scale(1.02)}
+.node .n-title{font-weight:700;font-size:15px}
+.node .n-title .idx{display:inline-block;min-width:24px;height:24px;line-height:24px;text-align:center;background:var(--panel2);border-radius:12px;font-size:12px;margin-right:9px;color:var(--muted);padding:0 6px}
+.node.active .n-title .idx{background:var(--accent);color:#fff}
+.node .n-desc{font-size:13px;color:var(--muted);margin-top:4px}
+.arrow{color:#c9c4b6;font-size:20px;height:26px;line-height:26px}
+.loop-note{font-size:12px;color:var(--purple);margin:3px 0}
+.decision{max-width:540px;width:100%;display:flex;gap:8px;justify-content:center;margin:6px 0;flex-wrap:wrap}
+.pill{font-size:12px;padding:5px 13px;border-radius:15px;border:1px solid var(--border);color:var(--muted);background:var(--panel);transition:all .3s}
+.pill.hot{border-color:var(--amber);color:var(--amber);background:rgba(199,138,59,.09);box-shadow:0 0 12px rgba(199,138,59,.2)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:22px}
 .card h3{font-size:16px;margin-bottom:8px}
 .card p{font-size:13.5px;color:var(--muted)}
 .card .ico{font-size:22px;margin-bottom:10px}
-
-footer{text-align:center;padding:40px 20px;color:var(--muted);font-size:13px;border-top:1px solid var(--border);margin-top:30px}
-footer a{color:var(--accent);text-decoration:none}
-.note{max-width:720px;margin:14px auto 0;font-size:12px;color:var(--muted);text-align:center}
+footer{text-align:center;padding:40px 20px;color:var(--muted);font-size:13px;border-top:1px solid var(--border);margin-top:24px}
+footer a{color:var(--accent-d);text-decoration:none}
 </style>
 </head>
 <body>
 <header>
   <div class="wrap">
-    <h1>testgen-agent</h1>
+    <h1>testgen-agent<span class="dot">.</span></h1>
     <p class="tag">自动生成并<strong>验证</strong>单元测试的代码质量 Agent</p>
     <div class="badges">
       <span class="badge">LangGraph</span>
@@ -86,11 +87,24 @@ footer a{color:var(--accent);text-decoration:none}
       <span class="badge g">● 9 tests passing</span>
     </div>
     <div class="cta">
-      <a class="primary" href="https://github.com/angshihan777-droid/testgen-agent" target="_blank">查看源码</a>
-      <a class="ghost" href="#demo">看它运行 ↓</a>
+      <a class="primary" href="#demo">看它运行 ↓</a>
+      <a class="ghost" href="https://github.com/angshihan777-droid/testgen-agent" target="_blank">查看源码</a>
     </div>
   </div>
 </header>
+
+<section id="demo">
+  <div class="wrap">
+    <h2>看它运行</h2>
+    <p class="sub">对一个内置了真实 bug 的示例项目生成测试 · 过程中会在疑似 bug 处停下等待人工确认</p>
+    <div class="term">
+      <div class="term-bar"><span class="dot3 r"></span><span class="dot3 y"></span><span class="dot3 g"></span><span class="term-title">testgen-agent — demo</span></div>
+      <div class="term-body" id="term"></div>
+    </div>
+    <button class="replay" id="replayBtn" style="display:none">↻ 重新播放</button>
+    <p class="note">注：示例中的 bug 是刻意埋入的（区间上界用 &lt; 应为 &lt;=），用于演示 bug 归因与人工审核。</p>
+  </div>
+</section>
 
 <section id="flow">
   <div class="wrap">
@@ -113,18 +127,6 @@ footer a{color:var(--accent);text-decoration:none}
       <div class="arrow">↓</div>
       <div class="node" data-k="report"><div class="n-title"><span class="idx">6</span>report · 量化报告</div><div class="n-desc">覆盖率变化、变异杀伤、确认的 bug、门禁结果</div></div>
     </div>
-  </div>
-</section>
-<section id="demo">
-  <div class="wrap">
-    <h2>看它运行</h2>
-    <p class="sub">下面的过程会自动重放——对一个内置了真实 bug 的示例项目生成测试</p>
-    <div class="term">
-      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">testgen-agent — demo</span></div>
-      <div class="term-body" id="term"></div>
-    </div>
-    <button class="replay" id="replayBtn">↻ 重新播放</button>
-    <p class="note">注：示例中的 bug 是刻意埋入的（区间上界用 &lt; 应为 &lt;=），用于演示 bug 归因能力。</p>
   </div>
 </section>
 
@@ -150,84 +152,75 @@ footer a{color:var(--accent);text-decoration:none}
   </div>
 </footer>
 <script>
-// 终端重放脚本：[延迟ms, html片段, 关联的流程节点key, 决策pill]
 const SCRIPT = [
-  [200,'<span class="c-prompt">$</span> <span class="c-cmd">testgen-agent run --source examples/src/calc.py --target 80</span>',null,null],
-  [500,'<span class="c-tag">[analyze]</span> ast 解析源码 → 发现 2 个函数：discount, in_range','analyze',null],
-  [500,'<span class="c-dim">          基线覆盖率 66.67%，考纲：in_range 需覆盖闭区间上界</span>','analyze',null],
-  [600,'<span class="c-tag">[generate]</span> 第 1 轮：生成 5 条 pytest 测试','generate',null],
-  [500,'<span class="c-tag">[execute ]</span> 沙盒隔离（源码只读）→ 运行 pytest --cov','execute',null],
-  [700,'<span class="c-dim">          </span><span class="progress" id="p1"></span>','execute',null],
-  [400,'<span class="c-tag">[execute ]</span> 变异测试：对 in_range 注入 4 个变异体重跑','execute',null],
-  [500,'<span class="c-tag">[evaluate]</span> 源码哈希校验通过 ✓（未被篡改）','evaluate',null],
-  [500,'<span class="c-warn">          断言失败：in_range(10,1,10) 期望 True 实际 False</span>','evaluate',null],
-  [500,'<span class="c-dim">          变异验证：将 &lt; 改为 &lt;= 后该测试转绿 → 疑似源码 bug</span>','evaluate','review'],
-  [700,'<span class="c-pur">[review  ]</span> ⏸ 暂停，请求人工确认疑似 bug','evaluate','review'],
-  [600,'<span class="c-prompt">          &gt;</span> <span class="c-cmd">k</span>  <span class="c-dim">（确认是 bug）</span>',null,'review'],
-  [500,'<span class="c-tag">[generate]</span> 第 2 轮：补齐 discount 分支测试','generate','retry'],
-  [500,'<span class="c-tag">[execute ]</span> 重新运行 → </span><span class="progress" id="p2"></span>','execute',null],
-  [500,'<span class="c-ok">[evaluate]</span> 覆盖率 88.89% ≥ 80% ✓  门禁 PASS','evaluate','done'],
-  [400,'<span class="c-tag">[report  ]</span> 生成量化报告','report','done'],
-  [300,'<span class="c-dim">────────────────────────────────────</span>',null,null],
-  [200,' 覆盖率     <span class="c-ok">66.67% → 88.89%  (+22.22)</span>','report',null],
-  [200,' 变异杀伤   <span class="c-ok">3 / 4</span>','report',null],
-  [200,' 确认真bug  <span class="c-bad">1</span>  <span class="c-dim">in_range 上界漏判</span>','report',null],
-  [200,' 门禁       <span class="c-ok">PASS</span>','report',null],
-  [200,'<span class="c-dim">────────────────────────────────────</span>',null,null],
+  [200,'<span class="c-prompt">$</span> <span class="c-cmd">testgen-agent run --source examples/src/calc.py --target 80</span>',null,null,{}],
+  [500,'<span class="c-tag">[analyze]</span> ast 解析源码 → 发现 2 个函数：discount, in_range','analyze',null,{}],
+  [450,'<span class="c-dim">          基线覆盖率 66.67%，考纲：in_range 需覆盖闭区间上界</span>','analyze',null,{}],
+  [600,'<span class="c-tag">[generate]</span> 第 1 轮：生成 5 条 pytest 测试','generate',null,{}],
+  [500,'<span class="c-tag">[execute ]</span> 沙盒隔离（源码只读）→ 运行 pytest --cov','execute',null,{}],
+  [200,'<span class="c-dim">          </span><span class="progress" id="p1"></span>','execute',null,{bar1:true}],
+  [500,'<span class="c-tag">[execute ]</span> 变异测试：对 in_range 注入 4 个变异体重跑','execute',null,{}],
+  [500,'<span class="c-tag">[evaluate]</span> 源码哈希校验通过 ✓（未被篡改）','evaluate',null,{}],
+  [450,'<span class="c-warn">          断言失败：in_range(10,1,10) 期望 True 实际 False</span>','evaluate',null,{}],
+  [450,'<span class="c-dim">          变异验证：将 &lt; 改为 &lt;= 后该测试转绿 → 疑似源码 bug</span>','evaluate','review',{}],
+  [500,'<span class="c-pur">[review  ]</span> ⏸ 暂停，请求人工确认',null,'review',{}],
+  [200,'<span class="c-dim">          用例   </span>tests/test_generated.py::test_bound_in_range',null,'review',{}],
+  [200,'<span class="c-dim">          证据   断言失败且变异验证显示测试描述了正确行为</span>',null,'review',{}],
+  [200,'<span class="c-warn">          [k] 确认是 bug   [i] 忽略</span>',null,'review',{pause:2600}],
+  [150,'<span class="c-prompt">          &gt;</span> <span class="c-cmd">k</span>  <span class="c-dim">（确认是 bug，标红上报并保留该测试）</span>',null,'review',{}],
+  [600,'<span class="c-tag">[generate]</span> 第 2 轮：补齐 discount 分支测试','generate','retry',{}],
+  [400,'<span class="c-tag">[execute ]</span> 重新运行 pytest --cov','execute',null,{}],
+  [200,'<span class="c-dim">          </span><span class="progress" id="p2"></span>','execute',null,{bar2:true}],
+  [500,'<span class="c-ok">[evaluate]</span> 覆盖率 88.89% ≥ 80% ✓  门禁 PASS','evaluate','done',{}],
+  [400,'<span class="c-tag">[report  ]</span> 生成量化报告','report','done',{}],
+  [250,'<span class="c-dim">──────────────────────────────────────</span>',null,null,{}],
+  [150,' 覆盖率     <span class="c-ok">66.67% → 88.89%  (+22.22)</span>','report',null,{}],
+  [150,' 变异杀伤   <span class="c-ok">3 / 4</span>','report',null,{}],
+  [150,' 确认真bug  <span class="c-bad">1</span>  <span class="c-dim">in_range 上界漏判</span>','report',null,{}],
+  [150,' 门禁       <span class="c-ok">PASS</span>','report',null,{}],
+  [150,'<span class="c-dim">──────────────────────────────────────</span>',null,null,{}],
 ];
 </script>
 <script>
 (function(){
-  const term = document.getElementById('term');
-  const btn = document.getElementById('replayBtn');
-  const nodes = {};
-  document.querySelectorAll('#flowDiagram .node').forEach(n=>nodes[n.dataset.k]=n);
-  const pills = {};
-  document.querySelectorAll('#flowDiagram .pill').forEach(p=>pills[p.dataset.d]=p);
-  let timers = [];
+  const term=document.getElementById('term');
+  const btn=document.getElementById('replayBtn');
+  const nodes={}; document.querySelectorAll('#flowDiagram .node').forEach(n=>nodes[n.dataset.k]=n);
+  const pills={}; document.querySelectorAll('#flowDiagram .pill').forEach(p=>pills[p.dataset.d]=p);
+  let runId=0;
+  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 
-  function clearAll(){
-    timers.forEach(t=>clearTimeout(t)); timers=[];
-    term.innerHTML='';
-    Object.values(nodes).forEach(n=>n.classList.remove('active'));
-    Object.values(pills).forEach(p=>p.classList.remove('hot'));
-  }
-  function highlight(key){
-    Object.values(nodes).forEach(n=>n.classList.remove('active'));
-    if(key && nodes[key]) nodes[key].classList.add('active');
-  }
-  function bar(pct,color){
-    const filled=Math.round(pct/5), total=20;
-    const done='█'.repeat(filled), rest='░'.repeat(total-filled);
-    return '<span style="color:'+color+'">'+done+'</span><span class="c-dim">'+rest+'</span> '+pct+'%';
-  }
-  function play(){
-    clearAll();
-    let acc=300;
-    SCRIPT.forEach(([delay,frag,nodeKey,pill])=>{
-      acc+=delay;
-      timers.push(setTimeout(()=>{
-        const div=document.createElement('div');
-        div.className='line'; div.innerHTML=frag;
-        term.appendChild(div);
-        if(nodeKey) highlight(nodeKey);
-        if(pill && pills[pill]){Object.values(pills).forEach(p=>p.classList.remove('hot'));pills[pill].classList.add('hot');}
-        term.scrollTop=term.scrollHeight;
-        // 动态覆盖率进度条
-        const p1=div.querySelector('#p1');
-        if(p1){ animateBar(p1, 66, 'var(--green)'); }
-        const p2=div.querySelector('#p2');
-        if(p2){ animateBar(p2, 88, 'var(--green)'); }
-      },acc));
-    });
-  }
-  function animateBar(el,target,color){
-    let v=0; const step=()=>{ v+=6; if(v>target)v=target; el.innerHTML=bar(v,color); if(v<target) setTimeout(step,40); };
-    step();
+  function highlight(k){Object.values(nodes).forEach(n=>n.classList.remove('active'));if(k&&nodes[k])nodes[k].classList.add('active');}
+  function hotPill(d){Object.values(pills).forEach(p=>p.classList.remove('hot'));if(d&&pills[d])pills[d].classList.add('hot');}
+  function bar(pct,color){const f=Math.round(pct/5),t=20;return '<span style="color:'+color+'">'+'█'.repeat(f)+'</span><span class="c-dim">'+'░'.repeat(t-f)+'</span> '+pct+'%';}
+  async function animateBar(el,target){let v=0;while(v<target){v=Math.min(v+6,target);el.innerHTML=bar(v,'#7fd39b');await sleep(38);}}
+
+  async function play(){
+    const my=++runId; term.innerHTML=''; highlight(null); hotPill(null); btn.style.display='none';
+    await sleep(300);
+    for(const [delay,frag,nodeKey,pill,opts] of SCRIPT){
+      if(my!==runId) return;
+      await sleep(delay);
+      const div=document.createElement('div'); div.className='line'; div.innerHTML=frag; term.appendChild(div);
+      if(nodeKey) highlight(nodeKey);
+      if(pill) hotPill(pill);
+      term.scrollTop=term.scrollHeight;
+      if(opts&&opts.bar1){const e=div.querySelector('#p1'); if(e) await animateBar(e,66);}
+      if(opts&&opts.bar2){const e=div.querySelector('#p2'); if(e) await animateBar(e,88);}
+      if(opts&&opts.pause){
+        // 模拟"等待人工输入"：显示闪烁光标并悬停
+        const cur=document.createElement('div'); cur.className='line';
+        cur.innerHTML='<span class="c-prompt">          &gt;</span> <span class="cursor"></span>';
+        term.appendChild(cur); term.scrollTop=term.scrollHeight;
+        await sleep(opts.pause);
+        if(my!==runId) return;
+        cur.remove();
+      }
+    }
+    if(my===runId) btn.style.display='block';
   }
   btn.addEventListener('click',play);
-  // 进入可视区自动播放一次
-  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){play();io.disconnect();}})},{threshold:.3});
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){play();io.disconnect();}})},{threshold:.25});
   io.observe(document.getElementById('demo'));
 })();
 </script>
