@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "testgen-agent"
+version = "0.1.0"
+description = "自动写/修单测并用变异测试验证其有效性的代码质量 Agent（LangGraph + 人工审核 + MCP）"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+    "langgraph>=0.2",
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "pytest-json-report>=1.5",
+]
+
+[project.optional-dependencies]
+llm = ["openai>=1.0"]
+mcp = ["mcp>=1.0"]
+
+[project.scripts]
+testgen-agent = "testgen_agent.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["testgen_agent*"]
+
+[tool.pytest.ini_options]
+markers = ["slow: 端到端测试，涉及真实子进程与沙盒"]

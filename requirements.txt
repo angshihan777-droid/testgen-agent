@@ -1,0 +1,8 @@
+langgraph>=0.2
+pytest>=7.0
+pytest-cov>=4.0
+pytest-json-report>=1.5
+# 可选：真实模型生成
+# openai>=1.0
+# 可选：作为 MCP 工具暴露
+# mcp>=1.0
