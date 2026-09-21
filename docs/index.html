@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>testgen-agent · 自动生成并验证单元测试的代码质量 Agent</title>
+<style>
+:root{
+  --bg:#0d1117; --panel:#161b22; --border:#30363d; --text:#e6edf3;
+  --muted:#8b949e; --accent:#58a6ff; --green:#3fb950; --red:#f85149;
+  --yellow:#d29922; --purple:#bc8cff;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+code,.mono{font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace}
+
+/* hero */
+header{text-align:center;padding:72px 20px 40px}
+header h1{font-size:44px;letter-spacing:-1px;background:linear-gradient(90deg,#58a6ff,#bc8cff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+header p.tag{font-size:19px;color:var(--muted);margin-top:14px}
+.badges{margin-top:22px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.badge{font-size:13px;padding:5px 12px;border:1px solid var(--border);border-radius:20px;color:var(--muted)}
+.badge.g{color:var(--green);border-color:rgba(63,185,80,.4)}
+.cta{margin-top:28px}
+.cta a{display:inline-block;padding:10px 22px;border-radius:8px;text-decoration:none;font-weight:600;font-size:15px}
+.cta a.primary{background:var(--accent);color:#0d1117}
+.cta a.ghost{border:1px solid var(--border);color:var(--text);margin-left:10px}
+
+section{padding:44px 0}
+h2{font-size:26px;margin-bottom:8px;text-align:center}
+.sub{text-align:center;color:var(--muted);margin-bottom:32px;font-size:15px}
+
+/* flow diagram */
+.flow{display:flex;flex-direction:column;align-items:center;gap:0}
+.node{width:100%;max-width:520px;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px 18px;transition:all .4s;position:relative;opacity:.45}
+.node.active{opacity:1;border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 0 24px rgba(88,166,255,.25);transform:scale(1.02)}
+.node .n-title{font-weight:700;font-size:15px}
+.node .n-title .idx{display:inline-block;width:22px;height:22px;line-height:22px;text-align:center;background:var(--border);border-radius:50%;font-size:12px;margin-right:8px;color:var(--text)}
+.node.active .n-title .idx{background:var(--accent);color:#0d1117}
+.node .n-desc{font-size:13px;color:var(--muted);margin-top:4px}
+.arrow{color:var(--muted);font-size:20px;height:26px;line-height:26px}
+.loop-note{font-size:12px;color:var(--purple);margin:2px 0}
+.decision{max-width:520px;width:100%;display:flex;gap:8px;justify-content:center;margin:6px 0}
+.pill{font-size:12px;padding:4px 12px;border-radius:14px;border:1px solid var(--border);color:var(--muted);transition:all .3s}
+.pill.hot{border-color:var(--yellow);color:var(--yellow);box-shadow:0 0 12px rgba(210,153,34,.3)}
+
+/* terminal */
+.term{background:#0a0e14;border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.4);max-width:720px;margin:0 auto}
+.term-bar{background:#161b22;padding:9px 14px;display:flex;align-items:center;gap:7px;border-bottom:1px solid var(--border)}
+.dot{width:12px;height:12px;border-radius:50%}
+.dot.r{background:#ff5f56}.dot.y{background:#ffbd2e}.dot.g{background:#27c93f}
+.term-title{margin-left:10px;font-size:12px;color:var(--muted)}
+.term-body{padding:16px 18px;font-family:"SFMono-Regular",Consolas,monospace;font-size:13.5px;min-height:340px;white-space:pre-wrap}
+.term-body .line{opacity:0;transform:translateY(4px);animation:fade .3s forwards}
+@keyframes fade{to{opacity:1;transform:none}}
+.c-prompt{color:var(--green)}.c-cmd{color:var(--text)}
+.c-tag{color:var(--accent)}.c-dim{color:var(--muted)}
+.c-ok{color:var(--green)}.c-warn{color:var(--yellow)}.c-bad{color:var(--red)}.c-pur{color:var(--purple)}
+.progress{display:inline-block;vertical-align:middle}
+.replay{display:block;margin:16px auto 0;background:transparent;border:1px solid var(--border);color:var(--muted);padding:6px 16px;border-radius:8px;cursor:pointer;font-size:13px}
+.replay:hover{border-color:var(--accent);color:var(--accent)}
+
+/* cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:20px}
+.card h3{font-size:16px;margin-bottom:8px}
+.card p{font-size:13.5px;color:var(--muted)}
+.card .ico{font-size:22px;margin-bottom:10px}
+
+footer{text-align:center;padding:40px 20px;color:var(--muted);font-size:13px;border-top:1px solid var(--border);margin-top:30px}
+footer a{color:var(--accent);text-decoration:none}
+.note{max-width:720px;margin:14px auto 0;font-size:12px;color:var(--muted);text-align:center}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>testgen-agent</h1>
+    <p class="tag">自动生成并<strong>验证</strong>单元测试的代码质量 Agent</p>
+    <div class="badges">
+      <span class="badge">LangGraph</span>
+      <span class="badge">变异测试</span>
+      <span class="badge">人工审核</span>
+      <span class="badge">MCP 工具</span>
+      <span class="badge g">● 9 tests passing</span>
+    </div>
+    <div class="cta">
+      <a class="primary" href="https://github.com/angshihan777-droid/testgen-agent" target="_blank">查看源码</a>
+      <a class="ghost" href="#demo">看它运行 ↓</a>
+    </div>
+  </div>
+</header>
+
+<section id="flow">
+  <div class="wrap">
+    <h2>运作流程</h2>
+    <p class="sub">一个 6 节点的 LangGraph 自主循环：生成 → 运行 → 评估 → 修正，直到达标</p>
+    <div class="flow" id="flowDiagram">
+      <div class="node" data-k="analyze"><div class="n-title"><span class="idx">1</span>analyze · 静态分析</div><div class="n-desc">用 ast 解析源码，提取函数、分支与源码哈希</div></div>
+      <div class="arrow">↓</div>
+      <div class="node" data-k="generate"><div class="n-title"><span class="idx">2</span>generate · 生成/修正测试</div><div class="n-desc">按源码与上一轮报错，用 LLM 写或修 pytest 测试</div></div>
+      <div class="arrow">↓</div>
+      <div class="node" data-k="execute"><div class="n-title"><span class="idx">3·4</span>execute · 沙盒运行 + 变异</div><div class="n-desc">源码只读隔离，真实跑 pytest --cov，再做变异测试</div></div>
+      <div class="arrow">↓</div>
+      <div class="node" data-k="evaluate"><div class="n-title"><span class="idx">5</span>evaluate · 门禁与归因</div><div class="n-desc">防篡改校验 + 覆盖率门禁 + 判断失败是测试错还是源码 bug</div></div>
+      <div class="decision">
+        <span class="pill" data-d="retry">retry ↺ 回到生成</span>
+        <span class="pill" data-d="review">review ⏸ 人工确认</span>
+        <span class="pill" data-d="done">done ✓ 收敛</span>
+      </div>
+      <div class="loop-note">↑ retry / review 时循环回到上游，这是它作为 Agent 的自主闭环</div>
+      <div class="arrow">↓</div>
+      <div class="node" data-k="report"><div class="n-title"><span class="idx">6</span>report · 量化报告</div><div class="n-desc">覆盖率变化、变异杀伤、确认的 bug、门禁结果</div></div>
+    </div>
+  </div>
+</section>
+<section id="demo">
+  <div class="wrap">
+    <h2>看它运行</h2>
+    <p class="sub">下面的过程会自动重放——对一个内置了真实 bug 的示例项目生成测试</p>
+    <div class="term">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">testgen-agent — demo</span></div>
+      <div class="term-body" id="term"></div>
+    </div>
+    <button class="replay" id="replayBtn">↻ 重新播放</button>
+    <p class="note">注：示例中的 bug 是刻意埋入的（区间上界用 &lt; 应为 &lt;=），用于演示 bug 归因能力。</p>
+  </div>
+</section>
+
+<section id="features">
+  <div class="wrap">
+    <h2>核心能力</h2>
+    <p class="sub">所有判定都建立在真实运行的结构化结果之上，而非模型的主观判断</p>
+    <div class="cards">
+      <div class="card"><div class="ico">🔁</div><h3>自动生成与修正</h3><p>生成测试后真实运行，失败时读取报错堆栈自动重写，无需人工介入。</p></div>
+      <div class="card"><div class="ico">🧬</div><h3>测试有效性验证</h3><p>用变异测试对源码做微小改动后重跑，判断测试是否真正覆盖了逻辑，而非只堆覆盖率数字。</p></div>
+      <div class="card"><div class="ico">🐛</div><h3>源码 bug 识别</h3><p>当测试在原始源码上失败、却能在某个变异体上通过时，判定为疑似源码 bug 并上报。</p></div>
+      <div class="card"><div class="ico">🔒</div><h3>沙盒隔离防篡改</h3><p>源码在沙盒中只读，运行前后做哈希校验，确保结果不被源码改动干扰。</p></div>
+      <div class="card"><div class="ico">✋</div><h3>人工审核</h3><p>仅在出现疑似源码 bug 时通过 interrupt 暂停，交由使用者确认，其余全自动完成。</p></div>
+      <div class="card"><div class="ico">🔌</div><h3>可作为 MCP 工具</h3><p>封装为 MCP 工具，可集成到 Codex、Claude 等 Agent 工作流中被调用。</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>testgen-agent · 一个开发者工具，命令行与 MCP 两种使用方式</p>
+    <p style="margin-top:8px"><a href="https://github.com/angshihan777-droid/testgen-agent" target="_blank">GitHub 仓库</a> · MIT License</p>
+  </div>
+</footer>
+<script>
+// 终端重放脚本：[延迟ms, html片段, 关联的流程节点key, 决策pill]
+const SCRIPT = [
+  [200,'<span class="c-prompt">$</span> <span class="c-cmd">testgen-agent run --source examples/src/calc.py --target 80</span>',null,null],
+  [500,'<span class="c-tag">[analyze]</span> ast 解析源码 → 发现 2 个函数：discount, in_range','analyze',null],
+  [500,'<span class="c-dim">          基线覆盖率 66.67%，考纲：in_range 需覆盖闭区间上界</span>','analyze',null],
+  [600,'<span class="c-tag">[generate]</span> 第 1 轮：生成 5 条 pytest 测试','generate',null],
+  [500,'<span class="c-tag">[execute ]</span> 沙盒隔离（源码只读）→ 运行 pytest --cov','execute',null],
+  [700,'<span class="c-dim">          </span><span class="progress" id="p1"></span>','execute',null],
+  [400,'<span class="c-tag">[execute ]</span> 变异测试：对 in_range 注入 4 个变异体重跑','execute',null],
+  [500,'<span class="c-tag">[evaluate]</span> 源码哈希校验通过 ✓（未被篡改）','evaluate',null],
+  [500,'<span class="c-warn">          断言失败：in_range(10,1,10) 期望 True 实际 False</span>','evaluate',null],
+  [500,'<span class="c-dim">          变异验证：将 &lt; 改为 &lt;= 后该测试转绿 → 疑似源码 bug</span>','evaluate','review'],
+  [700,'<span class="c-pur">[review  ]</span> ⏸ 暂停，请求人工确认疑似 bug','evaluate','review'],
+  [600,'<span class="c-prompt">          &gt;</span> <span class="c-cmd">k</span>  <span class="c-dim">（确认是 bug）</span>',null,'review'],
+  [500,'<span class="c-tag">[generate]</span> 第 2 轮：补齐 discount 分支测试','generate','retry'],
+  [500,'<span class="c-tag">[execute ]</span> 重新运行 → </span><span class="progress" id="p2"></span>','execute',null],
+  [500,'<span class="c-ok">[evaluate]</span> 覆盖率 88.89% ≥ 80% ✓  门禁 PASS','evaluate','done'],
+  [400,'<span class="c-tag">[report  ]</span> 生成量化报告','report','done'],
+  [300,'<span class="c-dim">────────────────────────────────────</span>',null,null],
+  [200,' 覆盖率     <span class="c-ok">66.67% → 88.89%  (+22.22)</span>','report',null],
+  [200,' 变异杀伤   <span class="c-ok">3 / 4</span>','report',null],
+  [200,' 确认真bug  <span class="c-bad">1</span>  <span class="c-dim">in_range 上界漏判</span>','report',null],
+  [200,' 门禁       <span class="c-ok">PASS</span>','report',null],
+  [200,'<span class="c-dim">────────────────────────────────────</span>',null,null],
+];
+</script>
+<script>
+(function(){
+  const term = document.getElementById('term');
+  const btn = document.getElementById('replayBtn');
+  const nodes = {};
+  document.querySelectorAll('#flowDiagram .node').forEach(n=>nodes[n.dataset.k]=n);
+  const pills = {};
+  document.querySelectorAll('#flowDiagram .pill').forEach(p=>pills[p.dataset.d]=p);
+  let timers = [];
+
+  function clearAll(){
+    timers.forEach(t=>clearTimeout(t)); timers=[];
+    term.innerHTML='';
+    Object.values(nodes).forEach(n=>n.classList.remove('active'));
+    Object.values(pills).forEach(p=>p.classList.remove('hot'));
+  }
+  function highlight(key){
+    Object.values(nodes).forEach(n=>n.classList.remove('active'));
+    if(key && nodes[key]) nodes[key].classList.add('active');
+  }
+  function bar(pct,color){
+    const filled=Math.round(pct/5), total=20;
+    const done='█'.repeat(filled), rest='░'.repeat(total-filled);
+    return '<span style="color:'+color+'">'+done+'</span><span class="c-dim">'+rest+'</span> '+pct+'%';
+  }
+  function play(){
+    clearAll();
+    let acc=300;
+    SCRIPT.forEach(([delay,frag,nodeKey,pill])=>{
+      acc+=delay;
+      timers.push(setTimeout(()=>{
+        const div=document.createElement('div');
+        div.className='line'; div.innerHTML=frag;
+        term.appendChild(div);
+        if(nodeKey) highlight(nodeKey);
+        if(pill && pills[pill]){Object.values(pills).forEach(p=>p.classList.remove('hot'));pills[pill].classList.add('hot');}
+        term.scrollTop=term.scrollHeight;
+        // 动态覆盖率进度条
+        const p1=div.querySelector('#p1');
+        if(p1){ animateBar(p1, 66, 'var(--green)'); }
+        const p2=div.querySelector('#p2');
+        if(p2){ animateBar(p2, 88, 'var(--green)'); }
+      },acc));
+    });
+  }
+  function animateBar(el,target,color){
+    let v=0; const step=()=>{ v+=6; if(v>target)v=target; el.innerHTML=bar(v,color); if(v<target) setTimeout(step,40); };
+    step();
+  }
+  btn.addEventListener('click',play);
+  // 进入可视区自动播放一次
+  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){play();io.disconnect();}})},{threshold:.3});
+  io.observe(document.getElementById('demo'));
+})();
+</script>
+</body>
+</html>
