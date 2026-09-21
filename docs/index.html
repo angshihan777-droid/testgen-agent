@@ -72,6 +72,25 @@ h2{font-size:27px;margin-bottom:8px;text-align:center;font-weight:700}
 .card .ico{font-size:22px;margin-bottom:10px}
 footer{text-align:center;padding:40px 20px;color:var(--muted);font-size:13px;border-top:1px solid var(--border);margin-top:24px}
 footer a{color:var(--accent-d);text-decoration:none}
+
+/* 看它运行 + 运作流程 并排布局 */
+#demo .wrap{max-width:1180px}
+.demo-flow-row{display:flex;gap:30px;align-items:flex-start}
+.col-demo,.col-flow{flex:1;min-width:0}
+.col-demo h2,.col-flow h2{text-align:left}
+.col-demo .sub,.col-flow .sub{text-align:left}
+.col-demo .term{max-width:none;margin:0}
+.col-demo .note{max-width:none;text-align:left;margin-left:0;margin-right:0}
+.col-demo .replay{margin-left:0}
+.col-flow .flow{align-items:stretch}
+.col-flow .node{max-width:none}
+.col-flow .decision{max-width:none;justify-content:flex-start}
+.col-flow .arrow,.col-flow .loop-note{text-align:left}
+@media(max-width:820px){
+  #demo .wrap{max-width:940px}
+  .demo-flow-row{flex-direction:column;gap:40px}
+  .col-flow .decision{justify-content:center}
+}
 </style>
 </head>
 <body>
@@ -88,6 +107,8 @@ footer a{color:var(--accent-d);text-decoration:none}
     </div>
     <div class="cta">
       <a class="primary" href="#demo">看它运行 ↓</a>
+      <a class="ghost" href="#flow">运作流程</a>
+      <a class="ghost" href="#features">核心能力</a>
       <a class="ghost" href="https://github.com/angshihan777-droid/testgen-agent" target="_blank">查看源码</a>
     </div>
   </div>
@@ -95,37 +116,38 @@ footer a{color:var(--accent-d);text-decoration:none}
 
 <section id="demo">
   <div class="wrap">
-    <h2>看它运行</h2>
-    <p class="sub">对一个内置了真实 bug 的示例项目生成测试 · 过程中会在疑似 bug 处停下等待人工确认</p>
-    <div class="term">
-      <div class="term-bar"><span class="dot3 r"></span><span class="dot3 y"></span><span class="dot3 g"></span><span class="term-title">testgen-agent — demo</span></div>
-      <div class="term-body" id="term"></div>
-    </div>
-    <button class="replay" id="replayBtn" style="display:none">↻ 重新播放</button>
-    <p class="note">注：示例中的 bug 是刻意埋入的（区间上界用 &lt; 应为 &lt;=），用于演示 bug 归因与人工审核。</p>
-  </div>
-</section>
-
-<section id="flow">
-  <div class="wrap">
-    <h2>运作流程</h2>
-    <p class="sub">一个 6 节点的 LangGraph 自主循环：生成 → 运行 → 评估 → 修正，直到达标</p>
-    <div class="flow" id="flowDiagram">
-      <div class="node" data-k="analyze"><div class="n-title"><span class="idx">1</span>analyze · 静态分析</div><div class="n-desc">用 ast 解析源码，提取函数、分支与源码哈希</div></div>
-      <div class="arrow">↓</div>
-      <div class="node" data-k="generate"><div class="n-title"><span class="idx">2</span>generate · 生成/修正测试</div><div class="n-desc">按源码与上一轮报错，用 LLM 写或修 pytest 测试</div></div>
-      <div class="arrow">↓</div>
-      <div class="node" data-k="execute"><div class="n-title"><span class="idx">3·4</span>execute · 沙盒运行 + 变异</div><div class="n-desc">源码只读隔离，真实跑 pytest --cov，再做变异测试</div></div>
-      <div class="arrow">↓</div>
-      <div class="node" data-k="evaluate"><div class="n-title"><span class="idx">5</span>evaluate · 门禁与归因</div><div class="n-desc">防篡改校验 + 覆盖率门禁 + 判断失败是测试错还是源码 bug</div></div>
-      <div class="decision">
-        <span class="pill" data-d="retry">retry ↺ 回到生成</span>
-        <span class="pill" data-d="review">review ⏸ 人工确认</span>
-        <span class="pill" data-d="done">done ✓ 收敛</span>
+    <div class="demo-flow-row">
+      <div class="col-demo">
+        <h2 id="flow">看它运行</h2>
+        <p class="sub">对一个内置了真实 bug 的示例项目生成测试 · 过程中会在疑似 bug 处停下等待人工确认</p>
+        <div class="term">
+          <div class="term-bar"><span class="dot3 r"></span><span class="dot3 y"></span><span class="dot3 g"></span><span class="term-title">testgen-agent — demo</span></div>
+          <div class="term-body" id="term"></div>
+        </div>
+        <button class="replay" id="replayBtn" style="display:none">↻ 重新播放</button>
+        <p class="note">注：示例中的 bug 是刻意埋入的（区间上界用 &lt; 应为 &lt;=），用于演示 bug 归因与人工审核。</p>
       </div>
-      <div class="loop-note">↑ retry / review 时循环回到上游，这是它作为 Agent 的自主闭环</div>
-      <div class="arrow">↓</div>
-      <div class="node" data-k="report"><div class="n-title"><span class="idx">6</span>report · 量化报告</div><div class="n-desc">覆盖率变化、变异杀伤、确认的 bug、门禁结果</div></div>
+      <div class="col-flow">
+        <h2>运作流程</h2>
+        <p class="sub">6 节点 LangGraph 自主循环，随左侧运行同步高亮</p>
+        <div class="flow" id="flowDiagram">
+          <div class="node" data-k="analyze"><div class="n-title"><span class="idx">1</span>analyze · 静态分析</div><div class="n-desc">用 ast 解析源码，提取函数、分支与源码哈希</div></div>
+          <div class="arrow">↓</div>
+          <div class="node" data-k="generate"><div class="n-title"><span class="idx">2</span>generate · 生成/修正测试</div><div class="n-desc">按源码与上一轮报错，用 LLM 写或修 pytest 测试</div></div>
+          <div class="arrow">↓</div>
+          <div class="node" data-k="execute"><div class="n-title"><span class="idx">3·4</span>execute · 沙盒运行 + 变异</div><div class="n-desc">源码只读隔离，真实跑 pytest --cov，再做变异测试</div></div>
+          <div class="arrow">↓</div>
+          <div class="node" data-k="evaluate"><div class="n-title"><span class="idx">5</span>evaluate · 门禁与归因</div><div class="n-desc">防篡改校验 + 覆盖率门禁 + 判断失败是测试错还是源码 bug</div></div>
+          <div class="decision">
+            <span class="pill" data-d="retry">retry ↺ 回到生成</span>
+            <span class="pill" data-d="review">review ⏸ 人工确认</span>
+            <span class="pill" data-d="done">done ✓ 收敛</span>
+          </div>
+          <div class="loop-note">↑ retry / review 时循环回到上游，这是它作为 Agent 的自主闭环</div>
+          <div class="arrow">↓</div>
+          <div class="node" data-k="report"><div class="n-title"><span class="idx">6</span>report · 量化报告</div><div class="n-desc">覆盖率变化、变异杀伤、确认的 bug、门禁结果</div></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
