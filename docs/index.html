@@ -138,6 +138,15 @@ h2{font-size:clamp(24px,4vw,27px);margin-bottom:8px;text-align:center;font-weigh
 .metric .value{font-size:clamp(21px,4vw,28px);font-weight:750;color:var(--accent-d);line-height:1.2}
 .metric .name{font-size:12.5px;color:var(--muted);margin-top:7px}
 .metric-note{text-align:center;color:var(--muted);font-size:12px;margin-top:14px}
+.chart-card{max-width:760px;margin:0 auto 18px;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:22px 20px}
+.chart-svg{width:100%;height:auto;display:block}
+.chart-legend{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+.chart-legend span{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--muted)}
+.chart-legend i{width:22px;height:0;border-top-width:3px;border-top-style:solid;display:inline-block}
+.lg-p{border-color:#d97757;border-top-style:dashed!important}
+.lg-r{border-color:#4a7fb5;border-top-style:dashed!important}
+.lg-f1{border-color:#3d8f5b}
+.chart-caption{text-align:center;color:var(--muted);font-size:12.5px;margin-top:10px}
 
 .quick-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(230px,.7fr);gap:18px;align-items:stretch}
 .command-box{background:var(--term-bg);color:var(--term-text);border:1px solid #3a362f;border-radius:12px;padding:20px;min-width:0;overflow:auto}
@@ -221,6 +230,7 @@ footer a{color:var(--accent-d);text-decoration:none}
       <a class="primary" href="#demo">看它运行 ↓</a>
       <a class="ghost" href="#why">为什么需要 Agent</a>
       <a class="ghost" href="#architecture">Agent 架构</a>
+      <a class="ghost" href="#results">数据评测</a>
       <a class="ghost gh-link" href="https://github.com/angshihan777-droid/testgen-agent" target="_blank" rel="noreferrer"><svg class="gh-ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg>查看源码</a>
     </div>
   </div>
@@ -369,6 +379,49 @@ footer a{color:var(--accent-d);text-decoration:none}
       <div class="metric"><div class="value">75%</div><div class="name">变异杀伤率 3/4</div></div>
       <div class="metric"><div class="value">1</div><div class="name">确认边界缺陷</div></div>
     </div>
+    <h3 style="text-align:center;font-size:17px;margin:34px 0 6px">QuixBugs 消融评测 · 三档 F1 对比</h3>
+    <p class="sub" style="margin-bottom:18px">在 12 个程序（buggy / correct 各一版）上对比：A 裸 LLM → B 闭环执行 → C 完整 Agent，缺陷检出质量逐档提升</p>
+    <div class="chart-card">
+      <svg class="chart-svg" viewBox="0 0 600 330" role="img" aria-label="A/B/C 三档消融的 Precision / Recall / F1 折线对比">
+  <line x1="64" y1="270" x2="560" y2="270" stroke="#e5e2d8" stroke-width="1"/>
+  <text x="56" y="274" text-anchor="end" font-size="12" fill="#77746b">0.0</text>
+  <line x1="64" y1="224.8" x2="560" y2="224.8" stroke="#e5e2d8" stroke-width="1"/>
+  <text x="56" y="228.8" text-anchor="end" font-size="12" fill="#77746b">0.2</text>
+  <line x1="64" y1="179.6" x2="560" y2="179.6" stroke="#e5e2d8" stroke-width="1"/>
+  <text x="56" y="183.6" text-anchor="end" font-size="12" fill="#77746b">0.4</text>
+  <line x1="64" y1="134.4" x2="560" y2="134.4" stroke="#e5e2d8" stroke-width="1"/>
+  <text x="56" y="138.4" text-anchor="end" font-size="12" fill="#77746b">0.6</text>
+  <line x1="64" y1="89.2" x2="560" y2="89.2" stroke="#e5e2d8" stroke-width="1"/>
+  <text x="56" y="93.2" text-anchor="end" font-size="12" fill="#77746b">0.8</text>
+  <line x1="64" y1="44" x2="560" y2="44" stroke="#e5e2d8" stroke-width="1"/>
+  <text x="56" y="48" text-anchor="end" font-size="12" fill="#77746b">1.0</text>
+  <text x="140" y="298" text-anchor="middle" font-size="13" fill="#28261f" font-weight="600">A · 裸 LLM</text>
+  <text x="315" y="298" text-anchor="middle" font-size="13" fill="#28261f" font-weight="600">B · 无变异闭环</text>
+  <text x="490" y="298" text-anchor="middle" font-size="13" fill="#28261f" font-weight="600">C · 完整 Agent</text>
+  <polyline points="140,72.3 315,69.1 490,66.6" fill="none" stroke="#d97757" stroke-width="2.5" stroke-dasharray="5 4" stroke-linejoin="round" stroke-linecap="round"/>
+  <circle cx="140" cy="72.3" r="4" fill="#faf9f5" stroke="#d97757" stroke-width="2.5"/>
+  <circle cx="315" cy="69.1" r="4" fill="#faf9f5" stroke="#d97757" stroke-width="2.5"/>
+  <circle cx="490" cy="66.6" r="4" fill="#faf9f5" stroke="#d97757" stroke-width="2.5"/>
+  <polyline points="140,138.2 315,119.3 490,100.5" fill="none" stroke="#4a7fb5" stroke-width="2.5" stroke-dasharray="5 4" stroke-linejoin="round" stroke-linecap="round"/>
+  <circle cx="140" cy="138.2" r="4" fill="#faf9f5" stroke="#4a7fb5" stroke-width="2.5"/>
+  <circle cx="315" cy="119.3" r="4" fill="#faf9f5" stroke="#4a7fb5" stroke-width="2.5"/>
+  <circle cx="490" cy="100.5" r="4" fill="#faf9f5" stroke="#4a7fb5" stroke-width="2.5"/>
+  <polyline points="140,111.8 315,97.8 490,85.1" fill="none" stroke="#3d8f5b" stroke-width="3.6"  stroke-linejoin="round" stroke-linecap="round"/>
+  <circle cx="140" cy="111.8" r="5" fill="#faf9f5" stroke="#3d8f5b" stroke-width="2.5"/>
+  <circle cx="315" cy="97.8" r="5" fill="#faf9f5" stroke="#3d8f5b" stroke-width="2.5"/>
+  <circle cx="490" cy="85.1" r="5" fill="#faf9f5" stroke="#3d8f5b" stroke-width="2.5"/>
+  <text x="140" y="99.8" text-anchor="middle" font-size="12.5" font-weight="700" fill="#3d8f5b">0.700</text>
+  <text x="315" y="85.8" text-anchor="middle" font-size="12.5" font-weight="700" fill="#3d8f5b">0.762</text>
+  <text x="504" y="82" text-anchor="start" font-size="12.5" font-weight="700" fill="#3d8f5b">0.818</text>
+</svg>
+      <div class="chart-legend">
+        <span><i class="lg-p"></i>Precision</span>
+        <span><i class="lg-r"></i>Recall</span>
+        <span><i class="lg-f1"></i>F1（综合）</span>
+      </div>
+      <p class="chart-caption">A：P 0.875 / R 0.583 / F1 0.700　·　B：P 0.889 / R 0.667 / F1 0.762　·　C：P 0.900 / R 0.750 / F1 0.818</p>
+    </div>
+    <p class="metric-note" style="margin-bottom:26px">评测集为 12 程序的小样本，结果呈现「完整 Agent 优于基线」的趋势，尚未做统计显著性检验；数值受 LLM 采样波动影响，仅用于说明闭环与人工确认对检出质量的增益。</p>
     <p class="metric-note">基线覆盖率 66.67%，最终覆盖率 88.89%；该结果是内置案例，不代表大规模数据集上的平均效果。</p>
   </div>
 </section>
