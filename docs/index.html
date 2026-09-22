@@ -140,17 +140,19 @@ h2{font-size:clamp(24px,4vw,27px);margin-bottom:8px;text-align:center;font-weigh
 .metric-note{text-align:center;color:var(--muted);font-size:12px;margin-top:14px}
 .eval-table-card{max-width:720px;margin:0 auto 18px;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 16px;overflow-x:auto}
 .eval-table{width:100%;border-collapse:collapse;font-size:14px;min-width:440px}
-.eval-table th,.eval-table td{padding:12px 10px;text-align:center;border-bottom:1px solid var(--border)}
+.eval-table th,.eval-table td{padding:12px 8px;text-align:center;border-bottom:1px solid var(--border);vertical-align:middle}
 .eval-table thead th{color:var(--muted);font-size:12.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
 .eval-table tbody tr:last-child td{border-bottom:none}
 .eval-table td.arm{text-align:left;font-weight:600;white-space:nowrap}
-.eval-table td.f1{font-weight:750;color:var(--accent-d)}
+.eval-table td.f1 .num{font-weight:750;color:var(--accent-d)}
 .eval-table tr.best{background:rgba(61,143,91,.07)}
-.eval-table tr.best td.f1{color:var(--green)}
+.eval-table tr.best td.f1 .num{color:var(--green)}
+.eval-table .cell{display:flex;flex-direction:column;align-items:center;gap:2px;line-height:1.25}
+.eval-table .num{font-variant-numeric:tabular-nums}
+.eval-table .delta{font-size:11px;font-weight:700;color:var(--green);min-height:14px}
+.eval-table .delta.empty{color:var(--muted);font-weight:500}
 .arm-tag{display:inline-block;width:22px;height:22px;line-height:22px;border-radius:7px;color:#fff;font-size:12px;font-weight:700;margin-right:9px;text-align:center}
 .arm-tag.a{background:#b0a89a}.arm-tag.b{background:var(--accent)}.arm-tag.c{background:var(--green)}
-.eval-table .up{color:var(--green);font-size:12px;font-weight:700}
-.eval-table .base{color:var(--muted);font-size:11px;font-weight:500;margin-left:3px}
 .eval-legend{text-align:center;color:var(--muted);font-size:12.5px;margin-top:12px}
 .eval-legend .up{color:var(--green);font-weight:700}
 .tag-best{color:var(--green);font-weight:700}
@@ -360,21 +362,6 @@ footer a{color:var(--accent-d);text-decoration:none}
   </div>
 </section>
 
-<section id="features">
-  <div class="wrap">
-    <h2>核心能力</h2>
-    <p class="sub">LLM 负责生成候选测试，关键门禁信号由真实执行和确定性工具提供</p>
-    <div class="cards">
-      <div class="card"><div class="ico">🔁</div><h3>执行反馈自修正</h3><p>生成测试后真实运行，将错误类型、失败信息和覆盖率反馈给下一轮生成，而不是一次性返回结果。</p></div>
-      <div class="card"><div class="ico">🧬</div><h3>测试有效性验证</h3><p>对源码注入比较运算符变异并重新运行测试，以变异体杀伤情况衡量用例对逻辑变化的敏感度。</p></div>
-      <div class="card"><div class="ico">🐛</div><h3>疑似缺陷辅助归因</h3><p>综合断言失败与变异结果生成缺陷证据，将不确定结论交给人工确认，避免直接把测试失败等同于源码错误。</p></div>
-      <div class="card"><div class="ico">🔒</div><h3>隔离执行与完整性校验</h3><p>在临时工作空间中执行生成测试，并通过运行前后的 SHA-256 哈希检测源码是否被修改。</p></div>
-      <div class="card"><div class="ico">✋</div><h3>Human-in-the-loop</h3><p>使用 interrupt 与 checkpointer 暂停工作流、保存状态并接收人工决定，其余可确定步骤自动执行。</p></div>
-      <div class="card"><div class="ico">🔌</div><h3>CLI 与 MCP 接入</h3><p>既可通过命令行独立运行，也可作为 MCP 工具接入 Codex、Claude 等上层 Agent 工作流。</p></div>
-    </div>
-  </div>
-</section>
-
 <section id="results">
   <div class="wrap">
     <h2>内置案例运行结果</h2>
@@ -398,26 +385,157 @@ footer a{color:var(--accent-d);text-decoration:none}
         <tbody>
           <tr>
             <td class="arm"><span class="arm-tag a">A</span>裸 LLM</td>
-            <td>0.875</td><td>0.583</td>
-            <td class="f1">0.700 <span class="base">基线</span></td>
-            <td>7 / 12</td>
+            <td><span class="cell"><span class="num">0.875</span><span class="delta"></span></span></td>
+            <td><span class="cell"><span class="num">0.583</span><span class="delta"></span></span></td>
+            <td class="f1"><span class="cell"><span class="num">0.700</span><span class="delta empty">基线</span></span></td>
+            <td><span class="cell"><span class="num">7 / 12</span><span class="delta"></span></span></td>
           </tr>
           <tr>
             <td class="arm"><span class="arm-tag b">B</span>无变异闭环</td>
-            <td>0.889 <span class="up">▲</span></td>
-            <td>0.667 <span class="up">▲</span></td>
-            <td class="f1">0.762 <span class="up">▲ +0.062</span></td>
-            <td>8 / 12 <span class="up">▲</span></td>
+            <td><span class="cell"><span class="num">0.889</span><span class="delta"></span></span></td>
+            <td><span class="cell"><span class="num">0.667</span><span class="delta"></span></span></td>
+            <td class="f1"><span class="cell"><span class="num">0.762</span><span class="delta">▲ +0.062</span></span></td>
+            <td><span class="cell"><span class="num">8 / 12</span><span class="delta"></span></span></td>
           </tr>
           <tr class="best">
             <td class="arm"><span class="arm-tag c">C</span>完整 Agent</td>
-            <td>0.900 <span class="up">▲</span></td>
-            <td>0.750 <span class="up">▲</span></td>
-            <td class="f1">0.818 <span class="up">▲ +0.118</span></td>
-            <td>9 / 12 <span class="up">▲</span></td>
+            <td><span class="cell"><span class="num">0.900</span><span class="delta"></span></span></td>
+            <td><span class="cell"><span class="num">0.750</span><span class="delta"></span></span></td>
+            <td class="f1"><span class="cell"><span class="num">0.818</span><span class="delta">▲ +0.118</span></span></td>
+            <td><span class="cell"><span class="num">9 / 12</span><span class="delta"></span></span></td>
           </tr>
         </tbody>
       </table>
       <p class="eval-legend"><span class="up">▲</span> 相对上一档提升 · <span class="tag-best">C 最优</span> · Recall 假阴性同步下降（漏检从 5→4→3）</p>
     </div>
-    
+        <p class="metric-note" style="margin-bottom:26px">评测集为 12 程序的小样本，结果呈现「完整 Agent 优于基线」的趋势，尚未做统计显著性检验；数值受 LLM 采样波动影响，仅用于说明闭环与人工确认对检出质量的增益。</p>
+    <p class="metric-note">基线覆盖率 66.67%，最终覆盖率 88.89%；该结果是内置案例，不代表大规模数据集上的平均效果。</p>
+  </div>
+</section>
+
+<section id="features">
+  <div class="wrap">
+    <h2>核心能力</h2>
+    <p class="sub">LLM 负责生成候选测试，关键门禁信号由真实执行和确定性工具提供</p>
+    <div class="cards">
+      <div class="card"><div class="ico">🔁</div><h3>执行反馈自修正</h3><p>生成测试后真实运行，将错误类型、失败信息和覆盖率反馈给下一轮生成，而不是一次性返回结果。</p></div>
+      <div class="card"><div class="ico">🧬</div><h3>测试有效性验证</h3><p>对源码注入比较运算符变异并重新运行测试，以变异体杀伤情况衡量用例对逻辑变化的敏感度。</p></div>
+      <div class="card"><div class="ico">🐛</div><h3>疑似缺陷辅助归因</h3><p>综合断言失败与变异结果生成缺陷证据，将不确定结论交给人工确认，避免直接把测试失败等同于源码错误。</p></div>
+      <div class="card"><div class="ico">🔒</div><h3>隔离执行与完整性校验</h3><p>在临时工作空间中执行生成测试，并通过运行前后的 SHA-256 哈希检测源码是否被修改。</p></div>
+      <div class="card"><div class="ico">✋</div><h3>Human-in-the-loop</h3><p>使用 interrupt 与 checkpointer 暂停工作流、保存状态并接收人工决定，其余可确定步骤自动执行。</p></div>
+      <div class="card"><div class="ico">🔌</div><h3>CLI 与 MCP 接入</h3><p>既可通过命令行独立运行，也可作为 MCP 工具接入 Codex、Claude 等上层 Agent 工作流。</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="quickstart">
+  <div class="wrap">
+    <h2>快速开始</h2>
+    <p class="sub">几条命令即可复现内置案例；没有模型密钥时也能使用确定性生成器跑通闭环</p>
+    <div class="quick-grid">
+      <div class="command-box mono"><pre><span class="prompt">$</span> pip install -r requirements.txt
+<span class="prompt">$</span> pip install -e .
+
+<span class="prompt">$</span> testgen-agent run \
+    --source examples/src/calc.py \
+    --test examples/tests/test_calc.py \
+    --target 80</pre></div>
+      <div class="card quick-note">
+        <div class="ico">⚙️</div>
+        <h3>可复现运行</h3>
+        <p>配置 <code>OPENAI_API_KEY</code> 后调用真实模型；未配置时自动使用内置确定性生成器，便于本地验证工作流。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="limits">
+  <div class="wrap">
+    <h2>当前边界</h2>
+    <p class="sub">项目当前定位为可运行的 MVP，明确能力边界比夸大自动化程度更重要</p>
+    <div class="limit-card">
+      <ul>
+        <li>目前主要面向 Python 单文件测试生成，尚未覆盖大型多模块仓库的依赖分析。</li>
+        <li>变异算子以比较运算符替换为主，后续可扩展常量、布尔条件与算术运算变异。</li>
+        <li>执行隔离基于临时工作空间和源码完整性校验，尚未提供容器级安全隔离与资源限制。</li>
+        <li>源码缺陷识别属于辅助归因，高不确定性结论必须经过 Human-in-the-loop 确认。</li>
+        <li>QuixBugs 对照评测正在完善，当前页面仅展示可复现的内置案例结果。</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>testgen-agent · 让模型生成，让工具验证，让人处理不确定性</p>
+    <p style="margin-top:8px"><a href="https://github.com/angshihan777-droid/testgen-agent" target="_blank" rel="noreferrer">GitHub 仓库</a> · MIT License</p>
+  </div>
+</footer>
+
+<script>
+const SCRIPT = [
+  [200,'<span class="c-prompt">$</span> <span class="c-cmd">testgen-agent run --source examples/src/calc.py --test examples/tests/test_calc.py --target 80</span>',null,null,{}],
+  [500,'<span class="c-tag">[analyze ]</span> AST 解析源码 → 发现 2 个函数：discount, in_range','analyze',null,{}],
+  [450,'<span class="c-dim">           基线覆盖率 66.67%，提取条件分支与闭区间边界提示</span>','analyze',null,{}],
+  [600,'<span class="c-tag">[generate]</span> 第 1 轮：根据源码与分支提示生成 pytest 测试','generate',null,{}],
+  [500,'<span class="c-tag">[execute ]</span> 复制到临时工作空间 → 运行 pytest --cov','execute',null,{}],
+  [200,'<span class="c-dim">           </span><span class="progress" id="p1"></span>','execute',null,{bar1:true}],
+  [500,'<span class="c-tag">[execute ]</span> 生成 4 个比较运算符变异体并逐个重跑测试','execute',null,{}],
+  [500,'<span class="c-tag">[evaluate]</span> SHA-256 校验通过 ✓（源码未被篡改）','evaluate',null,{}],
+  [450,'<span class="c-warn">           断言失败：in_range(10,1,10) 期望 True，实际 False</span>','evaluate',null,{}],
+  [450,'<span class="c-dim">           变异结果 3/4，结合断言失败标记为疑似源码缺陷</span>','evaluate','review',{}],
+  [500,'<span class="c-pur">[review  ]</span> ⏸ interrupt 暂停，请求人工确认',null,'review',{}],
+  [200,'<span class="c-dim">           用例  </span>tests/test_generated.py::test_bound_in_range',null,'review',{}],
+  [200,'<span class="c-dim">           证据  断言失败 + 变异测试结果</span>',null,'review',{}],
+  [200,'<span class="c-warn">           [k] 确认是 bug   [i] 忽略</span>',null,'review',{pause:2600}],
+  [150,'<span class="c-prompt">           &gt;</span> <span class="c-cmd">k</span>  <span class="c-dim">（记录人工决定并从断点恢复）</span>',null,'review',{}],
+  [600,'<span class="c-tag">[evaluate]</span> 人工审核完成 → 重新执行质量门禁','evaluate','done',{}],
+  [500,'<span class="c-ok">[evaluate]</span> 覆盖率 88.89% ≥ 80% ✓  门禁 PASS','evaluate','done',{}],
+  [400,'<span class="c-tag">[report  ]</span> 汇总 1 轮执行结果并生成量化报告','report','done',{}],
+  [250,'<span class="c-dim">──────────────────────────────────────</span>',null,null,{}],
+  [150,' 覆盖率     <span class="c-ok">66.67% → 88.89%  (+22.22)</span>','report',null,{}],
+  [150,' 变异杀伤   <span class="c-ok">3 / 4  (75%)</span>','report',null,{}],
+  [150,' 确认缺陷   <span class="c-bad">1</span>  <span class="c-dim">in_range 上界漏判</span>','report',null,{}],
+  [150,' 门禁       <span class="c-ok">PASS</span>','report',null,{}],
+  [150,'<span class="c-dim">──────────────────────────────────────</span>',null,null,{}],
+];
+
+(function(){
+  const term=document.getElementById('term');
+  const btn=document.getElementById('replayBtn');
+  const nodes={}; document.querySelectorAll('#flowDiagram .node').forEach(n=>nodes[n.dataset.k]=n);
+  const pills={}; document.querySelectorAll('#flowDiagram .pill').forEach(p=>pills[p.dataset.d]=p);
+  let runId=0;
+  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+
+  function highlight(k){Object.values(nodes).forEach(n=>n.classList.remove('active'));if(k&&nodes[k])nodes[k].classList.add('active');}
+  function hotPill(d){Object.values(pills).forEach(p=>p.classList.remove('hot'));if(d&&pills[d])pills[d].classList.add('hot');}
+  function bar(pct,color){const f=Math.round(pct/5),t=20;return '<span style="color:'+color+'">'+'█'.repeat(f)+'</span><span class="c-dim">'+'░'.repeat(t-f)+'</span> '+pct+'%';}
+  async function animateBar(el,target){let v=0;while(v<target){v=Math.min(v+6,target);el.innerHTML=bar(v,'#7fd39b');await sleep(38);}}
+
+  async function play(){
+    const my=++runId; term.innerHTML=''; highlight(null); hotPill(null); btn.style.display='none';
+    await sleep(300);
+    for(const [delay,frag,nodeKey,pill,opts] of SCRIPT){
+      if(my!==runId) return;
+      await sleep(delay);
+      const div=document.createElement('div'); div.className='line'; div.innerHTML=frag; term.appendChild(div);
+      if(nodeKey) highlight(nodeKey);
+      if(pill) hotPill(pill);
+      if(opts.bar1){await sleep(100);await animateBar(document.getElementById('p1'),89);}
+      if(opts.pause) await sleep(opts.pause);
+      term.scrollTop=term.scrollHeight;
+    }
+    btn.style.display='block';
+  }
+
+  btn.addEventListener('click',play);
+  const demo=document.getElementById('demo');
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(entries=>{if(entries[0].isIntersecting){io.disconnect();play();}},{threshold:.15});
+    io.observe(demo);
+  }else{play();}
+})();
+</script>
+</body>
+</html>
