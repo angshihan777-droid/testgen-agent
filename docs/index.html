@@ -138,15 +138,22 @@ h2{font-size:clamp(24px,4vw,27px);margin-bottom:8px;text-align:center;font-weigh
 .metric .value{font-size:clamp(21px,4vw,28px);font-weight:750;color:var(--accent-d);line-height:1.2}
 .metric .name{font-size:12.5px;color:var(--muted);margin-top:7px}
 .metric-note{text-align:center;color:var(--muted);font-size:12px;margin-top:14px}
-.chart-card{max-width:760px;margin:0 auto 18px;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:22px 20px}
-.chart-svg{width:100%;height:auto;display:block}
-.chart-legend{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:12px}
-.chart-legend span{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--muted)}
-.chart-legend i{width:22px;height:0;border-top-width:3px;border-top-style:solid;display:inline-block}
-.lg-p{border-color:#d97757;border-top-style:dashed!important}
-.lg-r{border-color:#4a7fb5;border-top-style:dashed!important}
-.lg-f1{border-color:#3d8f5b}
-.chart-caption{text-align:center;color:var(--muted);font-size:12.5px;margin-top:10px}
+.eval-table-card{max-width:720px;margin:0 auto 18px;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 16px;overflow-x:auto}
+.eval-table{width:100%;border-collapse:collapse;font-size:14px;min-width:440px}
+.eval-table th,.eval-table td{padding:12px 10px;text-align:center;border-bottom:1px solid var(--border)}
+.eval-table thead th{color:var(--muted);font-size:12.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.eval-table tbody tr:last-child td{border-bottom:none}
+.eval-table td.arm{text-align:left;font-weight:600;white-space:nowrap}
+.eval-table td.f1{font-weight:750;color:var(--accent-d)}
+.eval-table tr.best{background:rgba(61,143,91,.07)}
+.eval-table tr.best td.f1{color:var(--green)}
+.arm-tag{display:inline-block;width:22px;height:22px;line-height:22px;border-radius:7px;color:#fff;font-size:12px;font-weight:700;margin-right:9px;text-align:center}
+.arm-tag.a{background:#b0a89a}.arm-tag.b{background:var(--accent)}.arm-tag.c{background:var(--green)}
+.eval-table .up{color:var(--green);font-size:12px;font-weight:700}
+.eval-table .base{color:var(--muted);font-size:11px;font-weight:500;margin-left:3px}
+.eval-legend{text-align:center;color:var(--muted);font-size:12.5px;margin-top:12px}
+.eval-legend .up{color:var(--green);font-weight:700}
+.tag-best{color:var(--green);font-weight:700}
 
 .quick-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(230px,.7fr);gap:18px;align-items:stretch}
 .command-box{background:var(--term-bg);color:var(--term-text);border:1px solid #3a362f;border-radius:12px;padding:20px;min-width:0;overflow:auto}
@@ -379,161 +386,38 @@ footer a{color:var(--accent-d);text-decoration:none}
       <div class="metric"><div class="value">75%</div><div class="name">变异杀伤率 3/4</div></div>
       <div class="metric"><div class="value">1</div><div class="name">确认边界缺陷</div></div>
     </div>
-    <h3 style="text-align:center;font-size:17px;margin:34px 0 6px">QuixBugs 消融评测 · 三档 F1 对比</h3>
-    <p class="sub" style="margin-bottom:18px">在 12 个程序（buggy / correct 各一版）上对比：A 裸 LLM → B 闭环执行 → C 完整 Agent，缺陷检出质量逐档提升</p>
-    <div class="chart-card">
-      <svg class="chart-svg" viewBox="0 0 600 330" role="img" aria-label="A/B/C 三档消融的 Precision / Recall / F1 折线对比">
-  <line x1="64" y1="270" x2="560" y2="270" stroke="#e5e2d8" stroke-width="1"/>
-  <text x="56" y="274" text-anchor="end" font-size="12" fill="#77746b">0.0</text>
-  <line x1="64" y1="224.8" x2="560" y2="224.8" stroke="#e5e2d8" stroke-width="1"/>
-  <text x="56" y="228.8" text-anchor="end" font-size="12" fill="#77746b">0.2</text>
-  <line x1="64" y1="179.6" x2="560" y2="179.6" stroke="#e5e2d8" stroke-width="1"/>
-  <text x="56" y="183.6" text-anchor="end" font-size="12" fill="#77746b">0.4</text>
-  <line x1="64" y1="134.4" x2="560" y2="134.4" stroke="#e5e2d8" stroke-width="1"/>
-  <text x="56" y="138.4" text-anchor="end" font-size="12" fill="#77746b">0.6</text>
-  <line x1="64" y1="89.2" x2="560" y2="89.2" stroke="#e5e2d8" stroke-width="1"/>
-  <text x="56" y="93.2" text-anchor="end" font-size="12" fill="#77746b">0.8</text>
-  <line x1="64" y1="44" x2="560" y2="44" stroke="#e5e2d8" stroke-width="1"/>
-  <text x="56" y="48" text-anchor="end" font-size="12" fill="#77746b">1.0</text>
-  <text x="140" y="298" text-anchor="middle" font-size="13" fill="#28261f" font-weight="600">A · 裸 LLM</text>
-  <text x="315" y="298" text-anchor="middle" font-size="13" fill="#28261f" font-weight="600">B · 无变异闭环</text>
-  <text x="490" y="298" text-anchor="middle" font-size="13" fill="#28261f" font-weight="600">C · 完整 Agent</text>
-  <polyline points="140,72.3 315,69.1 490,66.6" fill="none" stroke="#d97757" stroke-width="2.5" stroke-dasharray="5 4" stroke-linejoin="round" stroke-linecap="round"/>
-  <circle cx="140" cy="72.3" r="4" fill="#faf9f5" stroke="#d97757" stroke-width="2.5"/>
-  <circle cx="315" cy="69.1" r="4" fill="#faf9f5" stroke="#d97757" stroke-width="2.5"/>
-  <circle cx="490" cy="66.6" r="4" fill="#faf9f5" stroke="#d97757" stroke-width="2.5"/>
-  <polyline points="140,138.2 315,119.3 490,100.5" fill="none" stroke="#4a7fb5" stroke-width="2.5" stroke-dasharray="5 4" stroke-linejoin="round" stroke-linecap="round"/>
-  <circle cx="140" cy="138.2" r="4" fill="#faf9f5" stroke="#4a7fb5" stroke-width="2.5"/>
-  <circle cx="315" cy="119.3" r="4" fill="#faf9f5" stroke="#4a7fb5" stroke-width="2.5"/>
-  <circle cx="490" cy="100.5" r="4" fill="#faf9f5" stroke="#4a7fb5" stroke-width="2.5"/>
-  <polyline points="140,111.8 315,97.8 490,85.1" fill="none" stroke="#3d8f5b" stroke-width="3.6"  stroke-linejoin="round" stroke-linecap="round"/>
-  <circle cx="140" cy="111.8" r="5" fill="#faf9f5" stroke="#3d8f5b" stroke-width="2.5"/>
-  <circle cx="315" cy="97.8" r="5" fill="#faf9f5" stroke="#3d8f5b" stroke-width="2.5"/>
-  <circle cx="490" cy="85.1" r="5" fill="#faf9f5" stroke="#3d8f5b" stroke-width="2.5"/>
-  <text x="140" y="99.8" text-anchor="middle" font-size="12.5" font-weight="700" fill="#3d8f5b">0.700</text>
-  <text x="315" y="85.8" text-anchor="middle" font-size="12.5" font-weight="700" fill="#3d8f5b">0.762</text>
-  <text x="504" y="82" text-anchor="start" font-size="12.5" font-weight="700" fill="#3d8f5b">0.818</text>
-</svg>
-      <div class="chart-legend">
-        <span><i class="lg-p"></i>Precision</span>
-        <span><i class="lg-r"></i>Recall</span>
-        <span><i class="lg-f1"></i>F1（综合）</span>
-      </div>
-      <p class="chart-caption">A：P 0.875 / R 0.583 / F1 0.700　·　B：P 0.889 / R 0.667 / F1 0.762　·　C：P 0.900 / R 0.750 / F1 0.818</p>
+    <h3 style="text-align:center;font-size:17px;margin:34px 0 6px">QuixBugs 消融评测 · 三档缺陷检出对比</h3>
+    <p class="sub" style="margin-bottom:18px">在 12 个程序（buggy / correct 各一版）上逐档对比：A 裸 LLM → B 闭环执行 → C 完整 Agent，检出质量随能力叠加而提升</p>
+    <div class="eval-table-card">
+      <table class="eval-table">
+        <thead>
+          <tr>
+            <th>配置</th><th>Precision</th><th>Recall</th><th>F1</th><th>检出缺陷</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="arm"><span class="arm-tag a">A</span>裸 LLM</td>
+            <td>0.875</td><td>0.583</td>
+            <td class="f1">0.700 <span class="base">基线</span></td>
+            <td>7 / 12</td>
+          </tr>
+          <tr>
+            <td class="arm"><span class="arm-tag b">B</span>无变异闭环</td>
+            <td>0.889 <span class="up">▲</span></td>
+            <td>0.667 <span class="up">▲</span></td>
+            <td class="f1">0.762 <span class="up">▲ +0.062</span></td>
+            <td>8 / 12 <span class="up">▲</span></td>
+          </tr>
+          <tr class="best">
+            <td class="arm"><span class="arm-tag c">C</span>完整 Agent</td>
+            <td>0.900 <span class="up">▲</span></td>
+            <td>0.750 <span class="up">▲</span></td>
+            <td class="f1">0.818 <span class="up">▲ +0.118</span></td>
+            <td>9 / 12 <span class="up">▲</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="eval-legend"><span class="up">▲</span> 相对上一档提升 · <span class="tag-best">C 最优</span> · Recall 假阴性同步下降（漏检从 5→4→3）</p>
     </div>
-    <p class="metric-note" style="margin-bottom:26px">评测集为 12 程序的小样本，结果呈现「完整 Agent 优于基线」的趋势，尚未做统计显著性检验；数值受 LLM 采样波动影响，仅用于说明闭环与人工确认对检出质量的增益。</p>
-    <p class="metric-note">基线覆盖率 66.67%，最终覆盖率 88.89%；该结果是内置案例，不代表大规模数据集上的平均效果。</p>
-  </div>
-</section>
-
-<section id="quickstart">
-  <div class="wrap">
-    <h2>快速开始</h2>
-    <p class="sub">几条命令即可复现内置案例；没有模型密钥时也能使用确定性生成器跑通闭环</p>
-    <div class="quick-grid">
-      <div class="command-box mono"><pre><span class="prompt">$</span> pip install -r requirements.txt
-<span class="prompt">$</span> pip install -e .
-
-<span class="prompt">$</span> testgen-agent run \
-    --source examples/src/calc.py \
-    --test examples/tests/test_calc.py \
-    --target 80</pre></div>
-      <div class="card quick-note">
-        <div class="ico">⚙️</div>
-        <h3>可复现运行</h3>
-        <p>配置 <code>OPENAI_API_KEY</code> 后调用真实模型；未配置时自动使用内置确定性生成器，便于本地验证工作流。</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="limits">
-  <div class="wrap">
-    <h2>当前边界</h2>
-    <p class="sub">项目当前定位为可运行的 MVP，明确能力边界比夸大自动化程度更重要</p>
-    <div class="limit-card">
-      <ul>
-        <li>目前主要面向 Python 单文件测试生成，尚未覆盖大型多模块仓库的依赖分析。</li>
-        <li>变异算子以比较运算符替换为主，后续可扩展常量、布尔条件与算术运算变异。</li>
-        <li>执行隔离基于临时工作空间和源码完整性校验，尚未提供容器级安全隔离与资源限制。</li>
-        <li>源码缺陷识别属于辅助归因，高不确定性结论必须经过 Human-in-the-loop 确认。</li>
-        <li>QuixBugs 对照评测正在完善，当前页面仅展示可复现的内置案例结果。</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <div class="wrap">
-    <p>testgen-agent · 让模型生成，让工具验证，让人处理不确定性</p>
-    <p style="margin-top:8px"><a href="https://github.com/angshihan777-droid/testgen-agent" target="_blank" rel="noreferrer">GitHub 仓库</a> · MIT License</p>
-  </div>
-</footer>
-
-<script>
-const SCRIPT = [
-  [200,'<span class="c-prompt">$</span> <span class="c-cmd">testgen-agent run --source examples/src/calc.py --test examples/tests/test_calc.py --target 80</span>',null,null,{}],
-  [500,'<span class="c-tag">[analyze ]</span> AST 解析源码 → 发现 2 个函数：discount, in_range','analyze',null,{}],
-  [450,'<span class="c-dim">           基线覆盖率 66.67%，提取条件分支与闭区间边界提示</span>','analyze',null,{}],
-  [600,'<span class="c-tag">[generate]</span> 第 1 轮：根据源码与分支提示生成 pytest 测试','generate',null,{}],
-  [500,'<span class="c-tag">[execute ]</span> 复制到临时工作空间 → 运行 pytest --cov','execute',null,{}],
-  [200,'<span class="c-dim">           </span><span class="progress" id="p1"></span>','execute',null,{bar1:true}],
-  [500,'<span class="c-tag">[execute ]</span> 生成 4 个比较运算符变异体并逐个重跑测试','execute',null,{}],
-  [500,'<span class="c-tag">[evaluate]</span> SHA-256 校验通过 ✓（源码未被篡改）','evaluate',null,{}],
-  [450,'<span class="c-warn">           断言失败：in_range(10,1,10) 期望 True，实际 False</span>','evaluate',null,{}],
-  [450,'<span class="c-dim">           变异结果 3/4，结合断言失败标记为疑似源码缺陷</span>','evaluate','review',{}],
-  [500,'<span class="c-pur">[review  ]</span> ⏸ interrupt 暂停，请求人工确认',null,'review',{}],
-  [200,'<span class="c-dim">           用例  </span>tests/test_generated.py::test_bound_in_range',null,'review',{}],
-  [200,'<span class="c-dim">           证据  断言失败 + 变异测试结果</span>',null,'review',{}],
-  [200,'<span class="c-warn">           [k] 确认是 bug   [i] 忽略</span>',null,'review',{pause:2600}],
-  [150,'<span class="c-prompt">           &gt;</span> <span class="c-cmd">k</span>  <span class="c-dim">（记录人工决定并从断点恢复）</span>',null,'review',{}],
-  [600,'<span class="c-tag">[evaluate]</span> 人工审核完成 → 重新执行质量门禁','evaluate','done',{}],
-  [500,'<span class="c-ok">[evaluate]</span> 覆盖率 88.89% ≥ 80% ✓  门禁 PASS','evaluate','done',{}],
-  [400,'<span class="c-tag">[report  ]</span> 汇总 1 轮执行结果并生成量化报告','report','done',{}],
-  [250,'<span class="c-dim">──────────────────────────────────────</span>',null,null,{}],
-  [150,' 覆盖率     <span class="c-ok">66.67% → 88.89%  (+22.22)</span>','report',null,{}],
-  [150,' 变异杀伤   <span class="c-ok">3 / 4  (75%)</span>','report',null,{}],
-  [150,' 确认缺陷   <span class="c-bad">1</span>  <span class="c-dim">in_range 上界漏判</span>','report',null,{}],
-  [150,' 门禁       <span class="c-ok">PASS</span>','report',null,{}],
-  [150,'<span class="c-dim">──────────────────────────────────────</span>',null,null,{}],
-];
-
-(function(){
-  const term=document.getElementById('term');
-  const btn=document.getElementById('replayBtn');
-  const nodes={}; document.querySelectorAll('#flowDiagram .node').forEach(n=>nodes[n.dataset.k]=n);
-  const pills={}; document.querySelectorAll('#flowDiagram .pill').forEach(p=>pills[p.dataset.d]=p);
-  let runId=0;
-  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-
-  function highlight(k){Object.values(nodes).forEach(n=>n.classList.remove('active'));if(k&&nodes[k])nodes[k].classList.add('active');}
-  function hotPill(d){Object.values(pills).forEach(p=>p.classList.remove('hot'));if(d&&pills[d])pills[d].classList.add('hot');}
-  function bar(pct,color){const f=Math.round(pct/5),t=20;return '<span style="color:'+color+'">'+'█'.repeat(f)+'</span><span class="c-dim">'+'░'.repeat(t-f)+'</span> '+pct+'%';}
-  async function animateBar(el,target){let v=0;while(v<target){v=Math.min(v+6,target);el.innerHTML=bar(v,'#7fd39b');await sleep(38);}}
-
-  async function play(){
-    const my=++runId; term.innerHTML=''; highlight(null); hotPill(null); btn.style.display='none';
-    await sleep(300);
-    for(const [delay,frag,nodeKey,pill,opts] of SCRIPT){
-      if(my!==runId) return;
-      await sleep(delay);
-      const div=document.createElement('div'); div.className='line'; div.innerHTML=frag; term.appendChild(div);
-      if(nodeKey) highlight(nodeKey);
-      if(pill) hotPill(pill);
-      if(opts.bar1){await sleep(100);await animateBar(document.getElementById('p1'),89);}
-      if(opts.pause) await sleep(opts.pause);
-      term.scrollTop=term.scrollHeight;
-    }
-    btn.style.display='block';
-  }
-
-  btn.addEventListener('click',play);
-  const demo=document.getElementById('demo');
-  if('IntersectionObserver' in window){
-    const io=new IntersectionObserver(entries=>{if(entries[0].isIntersecting){io.disconnect();play();}},{threshold:.15});
-    io.observe(demo);
-  }else{play();}
-})();
-</script>
-</body>
-</html>
+    
