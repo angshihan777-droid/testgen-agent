@@ -449,22 +449,6 @@ footer a{color:var(--accent-d);text-decoration:none}
   </div>
 </section>
 
-<section id="limits">
-  <div class="wrap">
-    <h2>当前边界</h2>
-    <p class="sub">项目当前定位为可运行的 MVP，明确能力边界比夸大自动化程度更重要</p>
-    <div class="limit-card">
-      <ul>
-        <li>目前主要面向 Python 单文件测试生成，尚未覆盖大型多模块仓库的依赖分析。</li>
-        <li>变异算子以比较运算符替换为主，后续可扩展常量、布尔条件与算术运算变异。</li>
-        <li>执行隔离基于临时工作空间和源码完整性校验，尚未提供容器级安全隔离与资源限制。</li>
-        <li>源码缺陷识别属于辅助归因，高不确定性结论必须经过 Human-in-the-loop 确认。</li>
-        <li>QuixBugs 对照评测正在完善，当前页面仅展示可复现的内置案例结果。</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
 <footer>
   <div class="wrap">
     <p>testgen-agent · 让模型生成，让工具验证，让人处理不确定性</p>
